@@ -1,0 +1,28 @@
+version: "2.0"
+
+services:
+    
+    rabbit:
+        image: rabbitmq
+        tty: true
+        restart: always
+        ports:
+            - "127.0.0.1:5672:5672"
+        
+    consumer:
+        build: ./consumer/
+        tty: true
+        restart: always
+        depends_on:
+            - "rabbit"
+            - "postgres"
+        links:
+            - rabbit
+            - postgres
+    
+    postgres:
+        build: ./pSQL/
+        tty: true
+        volumes: 
+            - ./pSQL/data:/var/lib/postgresql/data
+    
